@@ -11,16 +11,6 @@ import java.util.Date;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-    /* 401 */
-    @ExceptionHandler(UnauthorizedException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorBody> handleUnauthorizedException(UnauthorizedException ex) {
-        String status = "Unauthorized";
-        Date time = new Date();
-        String message = ex.getMessage();
-        ErrorBody errorBody = new ErrorBody(status, time.toString(),message);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorBody);
-    }
     
     /* 404 */
     @ExceptionHandler(RecordNotFoundException.class)
@@ -52,6 +42,17 @@ public class CustomExceptionHandler {
         String message = ex.getMessage();
         ErrorBody errorBody = new ErrorBody(status, time.toString(), message);
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorBody);
+    }
+
+    /* 400 */
+    @ExceptionHandler(InvalidInput.class)
+    @ResponseBody
+    public ResponseEntity<ErrorBody> BadRequest(InvalidInput ex) {
+        String status = "Invalid Input";
+        Date time = new Date();
+        String message = ex.getMessage();
+        ErrorBody errorBody = new ErrorBody(status,time.toString(),message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);
     }
 
     /* 500 */

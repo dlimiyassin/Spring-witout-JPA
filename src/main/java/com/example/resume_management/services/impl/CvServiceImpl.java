@@ -7,6 +7,7 @@ import com.example.resume_management.entities.Competence;
 import com.example.resume_management.entities.Cv;
 import com.example.resume_management.entities.Entreprise;
 import com.example.resume_management.entities.Info;
+import com.example.resume_management.exceptions.RecordAlreadyExistsException;
 import com.example.resume_management.exceptions.RecordNotFoundException;
 import com.example.resume_management.repositories.*;
 import com.example.resume_management.services.CvService;
@@ -45,6 +46,9 @@ public class CvServiceImpl  implements CvService {
     @Override
     public CvResponse addCv(CvRequest cvRequest) {
 
+        if (cv_repo.existsByFullName(cvRequest.getInfoPersonnel().getFullName())){
+            throw new RecordAlreadyExistsException("Candidate with name : "+cvRequest.getInfoPersonnel().getFullName()+" already exist.");
+        }
         Cv cv = new ModelMapper().map(cvRequest, Cv.class);
         int id_cv = cv_repo.save(cv);
 

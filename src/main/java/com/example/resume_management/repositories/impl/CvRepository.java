@@ -136,4 +136,20 @@ public class CvRepository implements CVRepository {
             return false;
         }
     }
+
+    public boolean existsByFullName(String name) {
+        String sql = "SELECT 1 FROM info WHERE fullName = ?";
+        try (Connection connection = myJDBC.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, name);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

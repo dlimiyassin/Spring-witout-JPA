@@ -5,6 +5,7 @@ import java.util.List;
 
 @Data
 public class CvRequest {
+
     private String title;
     private Info infoPersonnel;
     private List<Entreprise> entreprises;

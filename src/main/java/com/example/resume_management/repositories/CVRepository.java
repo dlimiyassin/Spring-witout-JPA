@@ -17,4 +17,5 @@ public interface CVRepository {
     public void deleteCv(int id);
 
     public boolean existsById(int id);
+    public boolean existsByFullName(String name);
 }
