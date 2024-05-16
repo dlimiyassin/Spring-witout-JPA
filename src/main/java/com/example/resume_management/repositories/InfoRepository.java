@@ -10,7 +10,7 @@ public interface InfoRepository {
 
     public Info getInfoByCvId(int id_cv);
 
-    public void updateInfo(Info info);
+    public void updateInfo(Info info,int id);
 
     public void deleteInfo(int id_info);
 }

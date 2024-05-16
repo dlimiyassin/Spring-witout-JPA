@@ -138,4 +138,5 @@ public class EntrepriseRepository implements EntroRepository {
             throw new RuntimeException(e);
         }
     }
+
 }

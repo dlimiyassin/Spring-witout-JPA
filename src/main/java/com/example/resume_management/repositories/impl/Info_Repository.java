@@ -91,7 +91,7 @@ public class Info_Repository implements InfoRepository {
         return info;
     }
 
-    public void updateInfo(Info info) {
+    public void updateInfo(Info info, int id_cv) {
         String sqlStatement = "UPDATE info SET fullName = ?, age = ? WHERE id = ?";
         try (
                 Connection connection = myJDBC.getConnection();
@@ -99,7 +99,7 @@ public class Info_Repository implements InfoRepository {
         ) {
             statement.setString(1, info.getFullName());
             statement.setInt(2, info.getAge());
-            statement.setInt(3, info.getId());
+            statement.setInt(3, id_cv);
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated == 0) {

@@ -132,13 +132,45 @@ public class CvServiceImpl  implements CvService {
 
 
     public CvResponse editCv(CvUpdate cv) {
-        CvResponse cvResponse = new CvResponse();
 
         //update cv
         cv_repo.updateCv(new ModelMapper().map(cv,Cv.class));
-        cvResponse = new ModelMapper().map(this.GetCv(cv.getId()),CvResponse.class);
+        Cv updatedCv = new ModelMapper().map(this.GetCv(cv.getId()),Cv.class);
 
-        return cvResponse;
+
+        //update Entreprise
+        List<Integer> idsEntro = cv_entro_repo.getEntreprisesIds(updatedCv.getId());
+        for (Integer i : idsEntro){
+            entro_repo.deleteEntreprise(i);
+        }
+        List<Entreprise> entreprises = new ArrayList<>();
+        for (Entreprise e: cv.getEntreprises()){ // {java, sql}  =>  {java, dotnet}
+            int entro_id = entro_repo.save(e);
+            cv_entro_repo.LinkCvToEntroprise(updatedCv.getId(), entro_id);
+            entreprises.add(entro_repo.getEntrepriseById(entro_id));
+        }
+        updatedCv.setEntreprises(entreprises);
+
+        //update Competence
+        List<Integer> idsSkill = cv_compentece_repo.getCompetencesIds(updatedCv.getId());
+        for (Integer i : idsSkill){
+            competence_repo.deleteCompetence(i);
+        }
+        List<Competence> competences = new ArrayList<>();
+        for (Competence c : cv.getCompetences()){
+            int skill_id = competence_repo.save(c);
+            cv_compentece_repo.LinkCvToCompetence(updatedCv.getId(), skill_id);
+            competences.add(competence_repo.getCompetenceById(skill_id));
+        }
+
+        //update Info
+        infoRepository.updateInfo(cv.getInfoPersonnel(),updatedCv.getId());
+        updatedCv.setInfoPersonnel(infoRepository.getInfoByCvId(updatedCv.getId()));
+        updatedCv.setEntreprises(entreprises);
+        updatedCv.setCompetences(competences);
+
+
+        return new ModelMapper().map(updatedCv,CvResponse.class);
     }
 
 
