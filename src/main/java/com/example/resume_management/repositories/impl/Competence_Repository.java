@@ -1,6 +1,7 @@
 package com.example.resume_management.repositories.impl;
 
 import com.example.resume_management.entities.Competence;
+import com.example.resume_management.entities.Entreprise;
 import com.example.resume_management.repositories.CompetenceRepository;
 import org.springframework.beans.factory.annotation.*;
 import com.example.resume_management.config.MyJDBC;
@@ -76,4 +77,68 @@ public class Competence_Repository implements CompetenceRepository {
         return competence;
     }
 
+
+    public void updateCompetence(Competence competence) {
+        String sqlStatement = "UPDATE competence SET name = ?, level = ? WHERE id = ?";
+        try (
+                Connection connection = myJDBC.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sqlStatement)
+        ) {
+            statement.setString(1, competence.getName());
+            statement.setInt(2, competence.getLevel());
+            statement.setInt(3, competence.getId());
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated == 0) {
+                throw new SQLException("Updating com failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating com with ID: " + competence.getId(), e);
+        }
+    }
+    public void deleteCompetence(int id_competence){
+        String sqlStatement = "DELETE FROM competence WHERE id = ?";
+        try(
+                Connection connection = myJDBC.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sqlStatement))
+        {
+            statement.setInt(1, id_competence);
+            statement.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean skillExistsByName(String name) {
+        String sql = "SELECT 1 FROM competence WHERE name = ?";
+        try (Connection connection = myJDBC.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, name);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next(); // Returns true if a record exists, false otherwise
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // In case of an exception, assume entreprise does not exist
+        }
+    }
+
+    public int getIdByName(String name){
+        String sql = "SELECT id FROM competence WHERE name = ?";
+        try(Connection connection = myJDBC.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1,name);
+            try(ResultSet rs = statement.executeQuery()){
+                if (rs.next()){
+                    return rs.getInt("id");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
+    }
 }

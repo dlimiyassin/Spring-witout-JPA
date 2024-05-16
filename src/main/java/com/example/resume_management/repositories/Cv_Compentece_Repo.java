@@ -7,4 +7,6 @@ public interface Cv_Compentece_Repo {
     public void LinkCvToCompetence(int 	id_cv,int id_competence);
 
     public List<Integer> getCompetencesIds(int id);
+
+    public void deleteRelation(int id_cv);
 }

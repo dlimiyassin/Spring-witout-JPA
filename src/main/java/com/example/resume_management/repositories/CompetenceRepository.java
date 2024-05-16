@@ -11,4 +11,12 @@ public interface CompetenceRepository {
     public List<Integer> saveAll(List<Competence> competences);
 
     public Competence getCompetenceById(int id);
+
+    public void updateCompetence(Competence competence);
+
+    public boolean skillExistsByName(String name);
+
+    public int getIdByName(String name);
+
+    public void deleteCompetence(int id_competence);
 }

@@ -9,6 +9,8 @@ public interface EntroRepository {
 
     public int save(Entreprise entreprise);
 
+    public boolean entrepriseExistsByName(String name);
+
     public List<Integer> saveAll(List<Entreprise> entreprises);
 
     public Entreprise getEntrepriseById(int id);
@@ -16,4 +18,7 @@ public interface EntroRepository {
     public void updateEntreprise(Entreprise entreprise);
 
     public void deleteEntreprise(int id);
+
+    public int getIdByName(String name);
+
 }

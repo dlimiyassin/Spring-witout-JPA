@@ -6,4 +6,6 @@ public interface Cv_Entro_Reop {
     public void LinkCvToEntroprise(int 	id_cv,int id_entreprise);
 
     public List<Integer> getEntreprisesIds(int id);
+
+    public void deleteRelation(int id_cv);
 }

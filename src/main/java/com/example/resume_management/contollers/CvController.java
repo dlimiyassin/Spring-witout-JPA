@@ -1,6 +1,7 @@
 package com.example.resume_management.contollers;
 
 import com.example.resume_management.dto.requests.CvRequest;
+import com.example.resume_management.dto.requests.CvUpdate;
 import com.example.resume_management.dto.responses.CvResponse;
 import com.example.resume_management.entities.Cv;
 import com.example.resume_management.services.CvService;
@@ -38,13 +39,14 @@ public class CvController {
     }
 
     @PutMapping()
-    public void editCv(@RequestBody Cv cv) {
-        cvService.editCv(cv);
+    public ResponseEntity<CvResponse> editCv(@RequestBody CvUpdate cv) {
+        return new ResponseEntity<>(cvService.editCv(cv), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping()
-    public void deleteCv(@RequestParam("id") int id) {
+    public ResponseEntity<Object> deleteCv(@RequestParam("id") int id) {
         cvService.deleteCv(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

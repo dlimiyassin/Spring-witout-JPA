@@ -121,4 +121,19 @@ public class CvRepository implements CVRepository {
         }
     }
 
+    public boolean existsById(int id) {
+        String sql = "SELECT 1 FROM cv WHERE id = ?";
+        try (Connection connection = myJDBC.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

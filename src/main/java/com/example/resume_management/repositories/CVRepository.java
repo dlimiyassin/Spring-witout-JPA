@@ -15,4 +15,6 @@ public interface CVRepository {
     public void updateCv(Cv cv);
 
     public void deleteCv(int id);
+
+    public boolean existsById(int id);
 }

@@ -55,4 +55,19 @@ public class CvEntrepriseRepo implements Cv_Entro_Reop {
         }
         return integerList;
     }
+
+    public void deleteRelation(int id_cv){
+        String sqlStatement = "DELETE FROM `cv-entreprise` WHERE id_cv = ?";
+        try(
+                Connection connection = myJDBC.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sqlStatement))
+        {
+            statement.setInt(1, id_cv);
+            statement.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

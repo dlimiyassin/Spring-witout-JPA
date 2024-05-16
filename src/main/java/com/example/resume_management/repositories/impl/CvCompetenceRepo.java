@@ -56,4 +56,18 @@ public class CvCompetenceRepo implements Cv_Compentece_Repo {
         }
         return integerList;
     }
+
+    public void deleteRelation(int id_cv){
+        String sqlStatement = "DELETE FROM `cv-competence` WHERE id_cv = ?";
+        try(
+                Connection connection = myJDBC.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sqlStatement))
+        {
+            statement.setInt(1, id_cv);
+            statement.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

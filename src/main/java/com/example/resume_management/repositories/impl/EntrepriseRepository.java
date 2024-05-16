@@ -42,6 +42,38 @@ public class EntrepriseRepository implements EntroRepository {
         return generatedId;
     }
 
+    public boolean entrepriseExistsByName(String name) {
+        String sql = "SELECT 1 FROM entreprise WHERE name = ?";
+        try (Connection connection = myJDBC.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, name);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next(); // Returns true if a record exists, false otherwise
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // In case of an exception, assume entreprise does not exist
+        }
+    }
+
+    public int getIdByName(String name){
+        String sql = "SELECT id FROM entreprise WHERE name = ?";
+        try(Connection connection = myJDBC.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1,name);
+            try(ResultSet rs = statement.executeQuery()){
+                if (rs.next()){
+                    return rs.getInt("id");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
+    }
+
     public List<Integer> saveAll(List<Entreprise> entreprises) {
         List<Integer> longList = new ArrayList<>();
 
@@ -74,29 +106,32 @@ public class EntrepriseRepository implements EntroRepository {
     }
 
 
-    public void updateEntreprise(Entreprise entreprise){
+    public void updateEntreprise(Entreprise entreprise) {
         String sqlStatement = "UPDATE entreprise SET name = ? WHERE id = ?";
-        try(
+        try (
                 Connection connection = myJDBC.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sqlStatement))
-        {
+                PreparedStatement statement = connection.prepareStatement(sqlStatement)
+        ) {
             statement.setString(1, entreprise.getName());
             statement.setInt(2, entreprise.getId());
 
-            statement.executeUpdate();
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated == 0) {
+                throw new SQLException("Updating entreprise failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating entreprise with ID: " + entreprise.getId(), e);
         }
     }
 
-    public void deleteEntreprise(int id){
+
+    public void deleteEntreprise(int id_entreprise){
         String sqlStatement = "DELETE FROM entreprise WHERE id = ?";
         try(
                 Connection connection = myJDBC.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sqlStatement))
         {
-            statement.setInt(1, id);
+            statement.setInt(1, id_entreprise);
             statement.executeUpdate();
         }
         catch (SQLException e) {

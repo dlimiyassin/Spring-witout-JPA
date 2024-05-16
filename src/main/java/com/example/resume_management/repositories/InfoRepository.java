@@ -9,4 +9,8 @@ public interface InfoRepository {
     public Info getInfoById(int id);
 
     public Info getInfoByCvId(int id_cv);
+
+    public void updateInfo(Info info);
+
+    public void deleteInfo(int id_info);
 }
